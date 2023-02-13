@@ -3,15 +3,15 @@ CMake Guide
 -   [Why?](#why)
 -   [How do we build a CMake project?](#how-do-we-build-a-cmake-project)
     -   [What is a CMake project?](#what-is-a-cmake-project)
-        -   [CMakeLists.txt](#cmakelists.txt)
+        -   [CMakeLists.txt](#cmakeliststxt)
         -   [The "source" and "binary" directories](#the-source-and-binary-directories)
-        -   [CMakeCache.txt](#cmakecache.txt)
+        -   [CMakeCache.txt](#cmakecachetxt)
         -   [Configure and generate steps](#configure-and-generate-steps)
     -   [Generate the build pipeline](#generate-the-build-pipeline)
-        -   [Configuration](#configuration)
+        -   [Cmake flags](#cmake-flags)
             -   [Build type](#build-type)
             -   [Compilation database](#compilation-database)
-    -   [Install](#install)
+    -   [Install a CMake project](#install-a-cmake-project)
 -   [The CMake Language](#the-cmake-language)
     -   [General CMake syntax](#general-cmake-syntax)
     -   [Commands, Functions, and Macros](#commands-functions-and-macros)
@@ -19,50 +19,40 @@ CMake Guide
         -   [Setting variables](#setting-variables)
         -   [Getting variables](#getting-variables)
         -   [Generator Expressions](#generator-expressions)
-    -   [Summary](#summary)
 -   [Modern CMake](#modern-cmake)
     -   [Targets and Properties](#targets-and-properties)
     -   [Property Inheritance](#property-inheritance)
     -   [target\_link\_libraries (the most important command)](#target_link_libraries-the-most-important-command)
     -   [Project Structure](#project-structure)
-        -   [project/](#project)
-        -   [build/](#build)
-        -   [include/ and src/](#include-and-src)
-        -   [app/](#app)
-        -   [tests/](#tests)
-        -   [extern/](#extern)
-        -   [cmake/](#cmake)
--   [What's in the CMakeLists.txt file?](#whats-in-the-cmakelists.txt-file)
-    -   [The project CMakeLists.txt](#the-project-cmakelists.txt)
-    -   [The src CMakeLists.txt](#the-src-cmakelists.txt)
-    -   [The apps CMakeLists.txt](#the-apps-cmakelists.txt)
-    -   [The tests CMakeLists.txt](#the-tests-cmakelists.txt)
+        -   [project directory](#project-directory)
+        -   [build directory](#build-directory)
+        -   [include and src directories](#include-and-src-directories)
+        -   [app directory](#app-directory)
+        -   [tests directory](#tests-directory)
+        -   [extern directory](#extern-directory)
+        -   [cmake directory](#cmake-directory)
+-   [What's in the CMakeLists.txt file?](#whats-in-the-cmakeliststxt-file)
+    -   [The project CMakeLists.txt](#the-project-cmakeliststxt)
+    -   [The src CMakeLists.txt](#the-src-cmakeliststxt)
+    -   [The apps CMakeLists.txt](#the-apps-cmakeliststxt)
+    -   [The tests CMakeLists.txt](#the-tests-cmakeliststxt)
 -   [How does CMake import dependencies?](#how-does-cmake-import-dependencies)
     -   [Git submodules](#git-submodules)
-        -   [Considerations](#considerations)
-        -   [How](#how)
-            -   [Add a git submodule](#add-a-git-submodule)
-            -   [Recursively update our project's submodules](#recursively-update-our-projects-submodules)
-            -   [Alert our project where the git submodule dependency is](#alert-our-project-where-the-git-submodule-dependency-is)
+        -   [Add a git submodule](#add-a-git-submodule)
+        -   [Recursively update our project's submodules](#recursively-update-our-projects-submodules)
+        -   [Alert our project where the git submodule dependency is](#alert-our-project-where-the-git-submodule-dependency-is)
     -   [FetchContent module](#fetchcontent-module)
-        -   [Considerations](#considerations-1)
-        -   [How](#how-1)
-            -   [Call the FetchContent module](#call-the-fetchcontent-module)
+        -   [Call the FetchContent module](#call-the-fetchcontent-module)
     -   [ExternalProject module](#externalproject-module)
-        -   [Considerations](#considerations-2)
-        -   [How](#how-2)
-            -   [Call the ExternalProject module](#call-the-externalproject-module)
+        -   [Call the ExternalProject module](#call-the-externalproject-module)
     -   [find\_package() command](#find_package-command)
-        -   [Considerations](#considerations-3)
-        -   [How](#how-3)
-            -   [Call find\_package()](#call-find_package)
-            -   [Write the find module](#write-the-find-module)
+        -   [Call find\_package()](#call-find_package)
+        -   [Write find modules](#write-find-modules)
 -   [How does CMake run tests?](#how-does-cmake-run-tests)
     -   [ctest](#ctest)
     -   [Copy test data](#copy-test-data)
 -   [How do we export a CMake project?](#how-do-we-export-a-cmake-project)
-    -   [install() command](#install-command)
-    -   [How](#how-4)
+    -   [Write config modules](#write-config-modules)
 -   [Sources](#sources)
 
 Why?
@@ -211,7 +201,7 @@ build pipeline? No. CMake figures it out. We only run cmake if we wish
 to generate a differently configured binary directory or perhaps
 override existing cached variable configuration.
 
-### Configuration
+### CMake flags
 
 We may pass *many* flags to the cmake command, hundreds. Plus, we may
 craft our own. CMake stores them as cache variables in the CMakeCache.txt.
@@ -268,7 +258,7 @@ The above will *flood* json and CMake files around our project so it's
 worth investigating how .gitignore files work. Moreover, we may have to
 alert our IDE to the location of the generated compilation database.
 
-Install
+Install a CMake project
 -------
 
 Assuming CMake created a build pipeline *and* we built, we should have
@@ -497,10 +487,8 @@ We know, it's a bizarre inconsistent syntax, however unavoidably
 useful. As is observed above, they often function similar to ternary
 expressions from the C languages.
 
-Summary
--------
-
-To finish, this example demonstrates functions and variables.
+To finish our swift tour of the CMake language, this example demonstrates 
+functions and variables.
 
 ```
 
@@ -698,12 +686,12 @@ should resemble the following (names vary):
 └── testlib.cpp
 ```
 
-### project/
+### `project` directory
 
 At the top of the project directory is a single CMakeLists.txt which
 organizes everything (explained later how).
 
-### build/
+### `build` directory
 
 The build directory contains the project output ie. binary artifacts,
 what CMake calls targets. These targets are: executables, libraries,
@@ -711,7 +699,7 @@ tests (the stuff we actually *build*). Note, this directory is
 intentionally separate from any source code which allows us to trivially
 remove it.
 
-### include/ and src/
+### `include` and `src` directories
 
 If our project creates libraries, meaning it has library targets
 (shared/static library binary artifacts), we have the include and src
@@ -722,7 +710,7 @@ modules). Also, note that src has a CMakeLists.txt file while include
 does not. To ease project installation, we separate the public header
 and source directories.
 
-### app/
+### `app` directory
 
 If our project creates executables, meaning it has executable targets
 (executable binary artifacts), we have the apps directory. As this is
@@ -731,13 +719,13 @@ directory contains *both* the headers *and* source for our executable
 targets. These are together because we won't be copying headers from
 this directory.
 
-### tests/
+### `tests` directory
 
 If our project creates tests, meaning it has test targets (which are
 really executable targets as well but hooked into CMake\'s testing
 system entitled ctest), we have the tests directory.
 
-### extern/
+### `extern` directory
 
 Our project very likely depends on 3rd party libraries. There are a
 variety of ways to link to these which *greatly* depends on their
@@ -746,7 +734,7 @@ configured CMake project (dubious). Assuming our 3rd party libraries are
 git based CMake projects, we place their git submodules in the extern
 directory.
 
-### cmake/
+### `cmake` directory
 
 Alas, it's very likely we will depend on 3rd party libraries that *are
 not* CMake projects (raw headers and static/shared objects on our
@@ -759,16 +747,16 @@ put these, and other related modules, in the cmake directory.
 To see all included modules:\
     cmake --help-module-list 
 
-What\'s in the CMakeLists.txt file?
-===================================
+What's in the CMakeLists.txt file?
+==================================
 
 A CMakeLists.txt file describes *what* to build (the targets) and *how*
 (the dependencies via properties). Therefore, its contents varies.
 However, utilizing the recommended project structure (prior described),
 we will tour the usual contents of a CMakeLists.txt file per directory.
 
-The project CMakeLists.txt   
------------------------------
+The project CMakeLists.txt
+--------------------------
 
 *defines:*
 -   minimum CMake version
@@ -817,7 +805,7 @@ add_subdirectory(tests)
 ```
 
 The src CMakeLists.txt 
------------------------
+----------------------
 
 *defines:*
 -   library targets (name and source)
@@ -920,8 +908,6 @@ The following examples assume the recommend directory structure.
 Git submodules
 --------------
 
-### Considerations
-
 Perhaps the easiest method, simply put git submodules in our project and
 build them from source.
 
@@ -930,9 +916,7 @@ We prefer the dependencies to be CMake projects though it's possible
 When cloning our project we must now also recursively update submodules
 but this may be scripted away.
 
-### How
-
-#### Add a git submodule
+### Add a git submodule
 
 From within our project directory, for each dependency, run the
 following
@@ -941,7 +925,7 @@ following
 git submodule add https://github.com/someAuthor/someLibrary extern/someLibrary 
 ```
 
-#### Recursively update our project\'s submodules
+### Recursively update our project's submodules
 
 From within our project directory, run the following
 
@@ -981,7 +965,7 @@ if(NOT EXISTS "${PROJECT_SOURCE_DIR}/extern/repo/CMakeLists.txt")
 endif()
 ```
 
-#### Alert our project where the git submodule dependency is
+### Alert our project where the git submodule dependency is
 
 In our top level project CMakeLists.txt file, we write:
 
@@ -992,9 +976,8 @@ add_subdirectory(extern/someGitProject)
 FetchContent module
 -------------------
 
-### Considerations
-
-Perhaps the easiest method that modern CMake supports *out of the box* since version 3.14. 
+Perhaps the easiest method that modern CMake supports *out of the box* since 
+version 3.14. 
 
 The FetchContent module downloads dependencies at **configure** time.
 Thus, our project may use this information for commands like
@@ -1003,9 +986,7 @@ dependencies are CMake projects but this not strictly required (though
 will again incur hassle). Since CMake 3.24, FetchContent may employ
 find\_package() with the FIND\_PACKAGE\_ARGS parameter.
 
-### How
-
-#### Call the FetchContent module
+### Call the FetchContent module
 
 We include the FetchContent module, declare dependencies, make them
 available, then use them as imported targets.
@@ -1039,8 +1020,6 @@ target_link_libraries(ThingUnitTest GTest::gtest_main)
 ExternalProject module
 ----------------------
 
-### Considerations
-
 The ExternalProject module is similar to the FetchContent module but
 older, more complex, and *crucially* downloads libraries only when we
 **build** (run make or whichever our platform demands). *Thus*,
@@ -1050,9 +1029,8 @@ chain on each other. Generally, git submodules or the FetchContent
 module are easier to use however they expect CMake dependencies which
 ExternalProject does not.
 
-### How
 
-#### Call the ExternalProject module
+### Call the ExternalProject module
 
 Our example pulls a zipped CMake project. This is only rudimentary,
 consult the documentation for the myriad of potential uses.
@@ -1070,8 +1048,6 @@ ExternalProject_add(
 
 find\_package() command
 -----------------------
-
-### Considerations
 
 The find\_package() command differs from the prior choices insofar as it
 *does not download anything.* Rather, find\_package() searches our local
@@ -1094,9 +1070,7 @@ CMake didn't already possess a find module for it. Writing config
 modules is the purview of the dependency owners. However, albeit less
 than preferred, we may write a find module.
 
-### How
-
-#### Call find\_package() 
+### Call find\_package() 
 
 In any search mode the call to find\_package() looks identical.
 
@@ -1104,7 +1078,7 @@ In any search mode the call to find\_package() looks identical.
 find_package(GTest REQUIRED) 
 ```
 
-#### Write the find module
+### Write find modules
 
 Assuming our desired dependency did not ship with package config files
 nor CMake shipped with a find module, we must write the find module
@@ -1273,31 +1247,33 @@ Exporting a CMake project means future consumers have access to the following:
 -   the version
 -   the dependencies
 
-The binary artefacts and headers are simple to copy. The rest is not.
-The rest is scattered among (mostly generated) CMake modules,
-specifically 3 modules:
--   a *config target module* (contains the target name information).
+The binary artefacts and headers are simple to copy. The rest are not.
+
+Through the creation of CMake modules, known as config modules, we export the 
+above project information. This process is somewhat clunky, fortunately we may 
+direct CMake to generate most of this for us.
+
+Specifically, we want 3 modules:
+-   a *config target module* (contains the project's target name information)
 -   a *config version module* (contains the project's version information)
--   a *config module* (consumes the above information and specifies which dependencies are required)
+-   a *config module* (consumes the above information and specifies which dependencies our project requires)
 
 These modules are then copied into the system library path.
-find\_package()calls the config module directly (which loads
-everything).
 
-install() command
------------------
+When a future consumer of our project calls find\_package(), in config mode, 
+it will directly call our config module. Then, our config module calls the 
+target and version modules.
+
+### Write config modules
 
 We have an aptly named command for copying everything into system
 locations; the install() command. We feed it a destination path and it
 copies. But, instead of hardcoding absolute paths we will exploit
 variables. This asks CMake to figure out the best system paths as well
-as allows niche overrides, for example a Debian package maintainer might
-want an unusual location instead.
+as allows niche overrides (a package maintainer might want an unusual install 
+location instead).
 
-How
----
-
-Generally, the procedure is
+We want our config modules to accomplish the following:
 -   copy the binary artefacts
 -   save the target export set
 -   copy the config target module (generated for us)
@@ -1305,6 +1281,9 @@ Generally, the procedure is
 -   write the config module (**not** generated for us)
 -   copy the config version module (generated for us)
 -   copy the config module
+
+We add the following to our project's CMakeLists.txt and then manually write 
+our config module to import what's generated.
 
 ```
 # import default path prefixes for systems, works even on windows despite the "Gnu" in the module name
