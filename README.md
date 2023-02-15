@@ -99,7 +99,7 @@ What is a CMake project?
 ------------------------
 
 A CMake project is a directory with a CMake language file called
-CMakelists.txt. That's *technically* all a cmake project is. However,we
+CMakelists.txt. That's *technically* all a cmake project is. However, we
 *strongly* recommend a specific subdirectory organization described further along.
 
 Let's explain the expectations of a CMake project further.
@@ -407,7 +407,7 @@ set(the_answer 42)
 set(my_cache_var "VALUE" CACHE STRING "Description")
 
 # cache (overwrites existing value always)
-set(my_cache_var "VALUE" CACHE STRING "Updated Description" FORCE)                                                             |
+set(my_cache_var "VALUE" CACHE STRING "Updated Description" FORCE)
 
 # environmental
 set(ENV{some_env_var} "whatever")
@@ -502,7 +502,7 @@ function(print_list my_list)
 endfunction()
 
 # create a "list" variable that can be interpreted as bools
-set(list_of_bools 0 1 2 3 on off yes no true false y n NOTFOUND Library-NOTFOUND)                                                  |
+set(list_of_bools 0 1 2 3 on off yes no true false y n NOTFOUND Library-NOTFOUND)
 
 message(list_of_bools)
 message(${list_of_bools})
