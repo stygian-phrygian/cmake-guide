@@ -27,7 +27,7 @@ CMake Guide
         -   [project directory](#project-directory)
         -   [build directory](#build-directory)
         -   [include and src directories](#include-and-src-directories)
-        -   [app directory](#app-directory)
+        -   [apps directory](#apps-directory)
         -   [tests directory](#tests-directory)
         -   [extern directory](#extern-directory)
         -   [cmake directory](#cmake-directory)
@@ -710,7 +710,7 @@ modules). Also, note that src has a CMakeLists.txt file while include
 does not. To ease project installation, we separate the public header
 and source directories.
 
-### `app` directory
+### `apps` directory
 
 If our project creates executables, meaning it has executable targets
 (executable binary artifacts), we have the apps directory. As this is
