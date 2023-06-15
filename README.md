@@ -688,8 +688,8 @@ should resemble the following (names vary):
 
 ### `project` directory
 
-At the top of the project directory is a single CMakeLists.txt which
-organizes everything (explained later how).
+Our root project directory contains a CMakeLists.txt which
+orchestrates the directories beneath it.
 
 ### `build` directory
 
@@ -703,21 +703,16 @@ remove it.
 
 If our project creates libraries, meaning it has library targets
 (shared/static library binary artifacts), we have the include and src
-directories. These respectively contain the header and source files for
-our *library* targets. Note, these directories *only* contain what *we*
-wrote *not* 3rd party content (contained in extern or found by CMake
-modules). Also, note that src has a CMakeLists.txt file while include
-does not. To ease project installation, we separate the public header
-and source directories.
+directories. The include directory *only* contains *public* headers, what we'd 
+like our library to export for others. The src directory contains *private* 
+headers and *private* source. We distinguish these directories to ease 
+installation as include may be trivially copied.
 
 ### `apps` directory
 
 If our project creates executables, meaning it has executable targets
-(executable binary artifacts), we have the apps directory. As this is
-not a library target (meaning we have no need to copy headers) the apps
-directory contains *both* the headers *and* source for our executable
-targets. These are together because we won't be copying headers from
-this directory.
+(executable binary artifacts), we have the apps directory. The apps
+directory contains both headers and source for our executable targets.
 
 ### `tests` directory
 
